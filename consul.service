@@ -1,0 +1,16 @@
+#!/bin/bash
+ConsulBasePath='/TRS/APP/Consul'
+
+case $1 in
+   'start')
+      ${ConsulBasePath}/consul agent -server -bootstrap-expect=1  -data-dir=${ConsulBasePath}/data \
+      -node=%s -config-dir=/${ConsulBasePath}/conf.d -pid-file=${ConsulBasePath}/consul.pid -ui \
+      -enable-script-checks=true -bind=%s -client=0.0.0.0  &>>${ConsulBasePath}/consul.log &
+   ;;
+   'stop')
+       kill -s SIGINT $(cat ${ConsulBasePath}/consul.pid)
+   ;;
+   *)
+       echo "Usage:systemctl start|stop consul"
+   ;;
+esac
